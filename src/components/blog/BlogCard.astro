@@ -1,0 +1,43 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+// Data
+import { tagLabel } from "@/data/tags";
+const { post } = Astro.props;
+const url = "/blog/posts/" + post.id;
+---
+
+<article class="group relative">
+  <a href={url} title={post.data.title} class="absolute inset-0 z-10"> </a>
+  <div class="overflow-hidden aspect-[3/2] bg-base-100">
+    <Image
+      src={post.data.image.url}
+      alt={post.data.image.alt}
+      width={1000}
+      height={667}
+      class="size-full object-cover group-hover:scale-105 duration-700 ease-out"
+    />
+  </div>
+  <div
+    class="mt-3 flex items-center gap-3 text-[0.65rem] uppercase tracking-[0.15em] text-base-500"
+  >
+    <time datetime={new Date(post.data.pubDate).toISOString()}>
+      {
+        new Date(post.data.pubDate).toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+      }
+    </time>
+    <span class="text-accent-600">{tagLabel(post.data.tags[0])}</span>
+  </div>
+  <Text
+    tag="h3"
+    variant="textBase"
+    class="mt-2 font-bold tracking-tight text-base-950 group-hover:underline underline-offset-4 decoration-accent-500 decoration-2 text-balance"
+    >{post.data.title}</Text
+  >
+</article>

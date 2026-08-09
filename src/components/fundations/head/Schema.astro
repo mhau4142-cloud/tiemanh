@@ -1,0 +1,49 @@
+---
+// Structured data LocalBusiness cho Google (hiện trên Maps/kết quả tìm kiếm)
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": "https://tiemanh.vn/#tiemanh",
+  name: "Tiệm Ảnh",
+  description:
+    "Tiệm chụp ảnh tại Hà Nội: kỷ yếu lớp, sự kiện, chân dung, ảnh profile và chụp tự do theo yêu cầu.",
+  url: "https://tiemanh.vn",
+  telephone: "+84868868238",
+  email: "lienhe@tiemanh.vn",
+  image: "https://tiemanh.vn/og-image.jpg",
+  priceRange: "150.000đ - 10.000.000đ",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "25 Tràng Thi",
+    addressLocality: "Hoàn Kiếm",
+    addressRegion: "Hà Nội",
+    addressCountry: "VN",
+  },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ],
+    opens: "09:00",
+    closes: "21:00",
+  },
+  sameAs: [
+    "https://facebook.com/tiemanh",
+    "https://instagram.com/tiemanh",
+    "https://zalo.me/0868868238",
+  ],
+  makesOffer: [
+    { "@type": "Offer", name: "Chụp kỷ yếu & sự kiện" },
+    { "@type": "Offer", name: "Chụp chân dung & ảnh profile" },
+    { "@type": "Offer", name: "Chụp tự do & dã ngoại theo yêu cầu" },
+  ],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

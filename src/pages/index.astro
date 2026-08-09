@@ -1,0 +1,361 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+import { getCollection } from "astro:content";
+const allGallery = (await getCollection("gallery")).sort(
+  (a, b) => Number(a.id) - Number(b.id)
+);
+// Lấy đúng 3 bộ mỗi dịch vụ để lưới 3 cột luôn phủ đều (kể cả khi lọc)
+const perCategory = new Map();
+const featuredGallery = allGallery.filter((post) => {
+  const count = perCategory.get(post.data.category) ?? 0;
+  if (count >= 3) return false;
+  perCategory.set(post.data.category, count + 1);
+  return true;
+});
+
+const services = [
+  {
+    number: "01",
+    title: "Kỷ yếu & sự kiện",
+    href: "/chup-ky-yeu",
+    description:
+      "Kỷ yếu lớp, lễ tốt nghiệp, sự kiện, workshop. Ekip trẻ, bắt trọn không khí thật — cười thật, quậy thật, không dàn dựng gượng gạo.",
+  },
+  {
+    number: "02",
+    title: "Chân dung & profile",
+    href: "/chup-chan-dung",
+    description:
+      "Ảnh thẻ đẹp hơn bạn nghĩ, ảnh hồ sơ xin việc, chân dung nghệ thuật và profile doanh nhân. Chỉn chu từ ánh sáng đến hậu kỳ.",
+  },
+  {
+    number: "03",
+    title: "Chụp tự do & dã ngoại",
+    href: "/chup-da-ngoai",
+    description:
+      "Đi theo yêu cầu: picnic, du lịch, phố xá, concept riêng của bạn. Bạn chọn địa điểm, Tiệm lo phần còn lại.",
+  },
+];
+
+const commitments = [
+  {
+    number: "01",
+    title: "Giá chốt trước, không phát sinh",
+    detail:
+      "Báo giá trọn gói ngay từ đầu. Chi phí di chuyển, lưu trú (nếu có) đều chốt trước buổi chụp — không phụ phí giữa chừng.",
+  },
+  {
+    number: "02",
+    title: "Giao ảnh đúng hẹn",
+    detail:
+      "Ảnh gốc gửi trong 24–48 giờ để bạn đăng ngay. Ảnh hậu kỳ trả trong 5–7 ngày tùy số lượng.",
+  },
+  {
+    number: "03",
+    title: "Hậu kỳ giữ nét thật",
+    detail:
+      "Không kéo da mịn như búp bê. Ảnh chỉnh xong vẫn là bạn — phiên bản tự tin nhất, và bạn được duyệt ảnh trước khi chốt.",
+  },
+];
+---
+
+<BaseLayout>
+  <!-- Hero full màn hình — video stock Pexels (cảnh chụp studio); có thể thay public/video/photoshoot.mp4 bằng video thật của tiệm -->
+  <section class="relative h-[calc(100svh-57px)] min-h-130 overflow-hidden">
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      class="absolute inset-0 size-full object-cover"
+    >
+      <source src="/video/photoshoot.mp4" type="video/mp4" />
+    </video>
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30"
+    >
+    </div>
+    <div class="relative z-10 flex h-full flex-col justify-between">
+      <Wrapper variant="standard" class="pt-6">
+        <div
+          class="flex justify-between text-[0.65rem] uppercase tracking-[0.2em] text-white/80"
+        >
+          <span>Studio ảnh — Hà Nội</span>
+          <span class="hidden sm:block">Kỷ yếu / Chân dung / Dã ngoại</span>
+        </div>
+      </Wrapper>
+      <Wrapper variant="standard" class="pb-12">
+        <h1 class="text-white">
+          <span
+            class="hero-line flex items-center gap-4 text-sm sm:text-base lg:text-lg font-light uppercase tracking-[0.4em] text-white/80"
+            >Giữ lại<span
+              class="inline-block h-px w-12 sm:w-20 bg-accent-400"></span></span
+          >
+          <span
+            class="hero-line block mt-3 text-[13vw] sm:text-7xl lg:text-8xl xl:text-9xl font-extrabold uppercase tracking-tighter leading-none"
+            >Khoảnh khắc</span
+          >
+          <span
+            class="hero-line block mt-3 text-[7.5vw] sm:text-5xl lg:text-6xl xl:text-7xl font-bold italic tracking-tight leading-none text-accent-400 sm:pl-14 lg:pl-24"
+            >theo cách của bạn</span
+          >
+        </h1>
+        <div
+          class="mt-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10"
+        >
+          <div class="flex gap-3">
+            <Button isLink href="/dat-lich" variant="accent" size="base"
+              >Đặt lịch chụp</Button
+            >
+            <a
+              href="/gallery"
+              class="flex items-center justify-center rounded-full border border-white/60 px-5 h-10 text-sm text-white hover:bg-white hover:text-black duration-300"
+              >Xem portfolio</a
+            >
+          </div>
+          <p class="max-w-xs text-xs text-white/60 leading-relaxed">
+            Tiệm Ảnh chụp kỷ yếu, chân dung và những chuyến đi. Trẻ, kỹ, đúng
+            hẹn — và không bao giờ bắt bạn cười gượng.
+          </p>
+        </div>
+      </Wrapper>
+    </div>
+  </section>
+
+  <!-- Dịch vụ -->
+  <section class="bg-base-950 text-white">
+    <Wrapper variant="standard" class="py-16 sm:py-24">
+      <Text
+        tag="h2"
+        variant="displayLG"
+        class="font-extrabold uppercase tracking-tight"
+      >
+        Tiệm chụp gì?
+      </Text>
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-12">
+        {
+          services.map((service) => (
+            <a
+              href={service.href}
+              class="group block border-t-2 border-accent-400 pt-6"
+            >
+              <span class="text-accent-400 font-extrabold text-5xl">
+                {service.number}
+              </span>
+              <Text
+                tag="h3"
+                variant="displayXS"
+                class="font-bold uppercase mt-4 group-hover:text-accent-400 duration-300"
+              >
+                {service.title}
+              </Text>
+              <Text tag="p" variant="textSM" class="text-base-400 mt-3">
+                {service.description}
+              </Text>
+              <span class="mt-4 inline-block text-xs font-bold uppercase tracking-[0.15em] text-white border-b-2 border-accent-400 pb-1 group-hover:border-white duration-300">
+                Xem chi tiết →
+              </span>
+            </a>
+          ))
+        }
+      </div>
+      <div class="mt-12">
+        <Button isLink href="/bang-gia" variant="accent" size="base"
+          >Xem bảng giá</Button
+        >
+      </div>
+    </Wrapper>
+  </section>
+
+  <!-- Portfolio — ảnh stock Pexels theo đúng chủ đề từng bộ; thay dần bằng ảnh thật của tiệm trong src/images/gallery -->
+  <section>
+    <Wrapper variant="standard" class="py-16 sm:py-24">
+      <div class="flex items-end justify-between">
+        <Text
+          tag="h2"
+          variant="displayLG"
+          class="font-extrabold uppercase tracking-tight text-base-950"
+        >
+          Portfolio
+        </Text>
+        <a
+          href="/gallery"
+          class="uppercase text-xs font-medium text-base-900 hover:text-base-600 duration-300 underline underline-offset-4"
+          >Xem tất cả</a
+        >
+      </div>
+
+      <!-- Bộ lọc theo dịch vụ -->
+      <div
+        class="mt-8 flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap"
+        id="portfolioFilters"
+      >
+        {
+          [
+            "Tất cả",
+            "Kỷ yếu & sự kiện",
+            "Chân dung & profile",
+            "Chụp tự do & dã ngoại",
+          ].map((label, i) => (
+            <button
+              type="button"
+              data-filter={i === 0 ? "all" : label}
+              class={`portfolio-filter shrink-0 whitespace-nowrap px-4 py-2 text-xs font-bold uppercase tracking-wide border duration-300 ${
+                i === 0
+                  ? "bg-base-950 text-white border-base-950"
+                  : "bg-white text-base-900 border-base-300 hover:border-base-950"
+              }`}
+            >
+              {label}
+            </button>
+          ))
+        }
+      </div>
+
+      <div
+        class="mt-10 grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+        id="portfolioGrid"
+      >
+        {
+          featuredGallery.map((post) => (
+            <article
+              class="portfolio-item group relative"
+              data-category={post.data.category}
+            >
+              <a
+                href={`/gallery/posts/${post.id}`}
+                title={post.data.title}
+                class="absolute inset-0 z-10"
+              />
+              <div class="overflow-hidden aspect-[4/5] bg-base-100">
+                <Image
+                  src={post.data.thumbnail.url}
+                  alt={post.data.thumbnail.alt}
+                  width={900}
+                  height={1125}
+                  class="size-full object-cover group-hover:scale-105 duration-700 ease-out"
+                />
+              </div>
+              <div class="mt-3">
+                <Text
+                  tag="h3"
+                  variant="textSM"
+                  class="font-bold tracking-tight text-base-950 group-hover:underline underline-offset-4 decoration-accent-500 decoration-2"
+                >
+                  {post.data.title}
+                </Text>
+                <span
+                  class="block mt-1 text-[0.65rem] uppercase tracking-[0.15em] text-base-500"
+                >
+                  {post.data.category}
+                </span>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+
+  <!-- Cam kết của Tiệm (thay testimonial mẫu; khi có cảm nhận thật của khách sẽ thêm section riêng) -->
+  <section class="border-t border-base-200">
+    <Wrapper variant="standard" class="py-16 sm:py-24">
+      <Text
+        tag="h2"
+        variant="displayLG"
+        class="font-extrabold uppercase tracking-tight text-base-950"
+      >
+        Cam kết của Tiệm
+      </Text>
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-12">
+        {
+          commitments.map((item) => (
+            <div>
+              <span class="inline-block bg-accent-400 px-2 py-1 text-sm font-extrabold text-base-950">
+                {item.number}
+              </span>
+              <h3 class="mt-4 text-lg font-bold text-base-950">
+                {item.title}
+              </h3>
+              <p class="mt-2 text-base text-base-800">{item.detail}</p>
+            </div>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+
+  <!-- CTA cuối trang -->
+  <section class="bg-accent-400">
+    <Wrapper variant="standard" class="py-16 sm:py-20 text-center">
+      <Text
+        tag="h2"
+        variant="displayXL"
+        class="font-extrabold uppercase tracking-tight text-black text-balance"
+      >
+        Có buổi chụp trong đầu rồi?
+      </Text>
+      <Text tag="p" variant="textLG" class="text-black/70 mt-4">
+        Nhắn Tiệm một tiếng — báo giá trong ngày, không phát sinh lắt nhắt.
+      </Text>
+      <div class="mt-8 flex justify-center">
+        <Button isLink href="/dat-lich" variant="default" size="lg"
+          >Đặt lịch ngay</Button
+        >
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-line {
+      opacity: 0;
+      transform: translateY(28px);
+      animation: hero-rise 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+    .hero-line:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+    .hero-line:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+    @keyframes hero-rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".portfolio-filter");
+    const items = document.querySelectorAll(".portfolio-item");
+    const activeClasses = ["bg-base-950", "text-white", "border-base-950"];
+    const inactiveClasses = ["bg-white", "text-base-900", "border-base-300"];
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.dataset.filter;
+        buttons.forEach((b) => {
+          b.classList.remove(...activeClasses);
+          b.classList.add(...inactiveClasses);
+        });
+        button.classList.remove(...inactiveClasses);
+        button.classList.add(...activeClasses);
+        items.forEach((item) => {
+          const show = filter === "all" || item.dataset.category === filter;
+          item.classList.toggle("hidden", !show);
+        });
+      });
+    });
+  });
+</script>

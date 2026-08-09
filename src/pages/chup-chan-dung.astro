@@ -1,0 +1,7 @@
+---
+import ServicePage from "@/components/services/ServicePage.astro";
+import { services } from "@/data/services";
+const service = services.find((s) => s.slug === "chup-chan-dung");
+---
+
+<ServicePage service={service} />

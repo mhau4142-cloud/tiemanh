@@ -1,0 +1,42 @@
+---
+// Nút liên hệ nhanh nổi ở góc phải dưới
+const contacts = [
+  {
+    label: "Gọi",
+    title: "Gọi cho Tiệm Ảnh — 0868 868 238",
+    href: "tel:+84868868238",
+    classes: "bg-accent-400 text-black hover:bg-accent-300",
+  },
+  {
+    label: "Zalo",
+    title: "Nhắn Zalo cho Tiệm Ảnh",
+    href: "https://zalo.me/0868868238",
+    classes: "bg-base-950 text-white hover:bg-base-800",
+  },
+  {
+    label: "FB",
+    title: "Nhắn Messenger cho Tiệm Ảnh",
+    href: "https://m.me/tiemanh",
+    classes: "bg-base-950 text-white hover:bg-base-800",
+  },
+];
+---
+
+<div
+  class="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-3 sm:right-4 z-50 flex flex-col gap-2"
+  aria-label="Liên hệ nhanh"
+>
+  {
+    contacts.map((contact) => (
+      <a
+        href={contact.href}
+        title={contact.title}
+        target={contact.href.startsWith("tel:") ? undefined : "_blank"}
+        rel={contact.href.startsWith("tel:") ? undefined : "noopener"}
+        class={`flex size-11 sm:size-12 items-center justify-center text-xs font-extrabold uppercase shadow-lg duration-300 ${contact.classes}`}
+      >
+        {contact.label}
+      </a>
+    ))
+  }
+</div>

@@ -1,0 +1,82 @@
+---
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+const footerLinks = [
+  { text: "Chụp kỷ yếu & sự kiện", href: "/chup-ky-yeu" },
+  { text: "Chụp chân dung & profile", href: "/chup-chan-dung" },
+  { text: "Chụp tự do & dã ngoại", href: "/chup-da-ngoai" },
+  { text: "Thư viện ảnh", href: "/gallery" },
+  { text: "Về Tiệm", href: "/studio" },
+  { text: "Bảng giá", href: "/bang-gia" },
+  { text: "Blog", href: "/blog" },
+  { text: "Đặt lịch chụp", href: "/dat-lich" },
+];
+const socialLinks = [
+  { text: "Zalo", href: "https://zalo.me/0868868238" },
+  { text: "Facebook", href: "https://facebook.com/tiemanh" },
+  { text: "Instagram", href: "https://instagram.com/tiemanh" },
+];
+---
+
+<footer class="bg-base-950 text-white">
+  <Wrapper variant="standard" class="py-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div>
+        <span class="uppercase text-sm font-extrabold tracking-tight"
+          >Tiệm<span class="bg-accent-400 text-black px-1 ml-1">Ảnh</span></span
+        >
+        <Text tag="p" variant="textSM" class="text-base-400 mt-4">
+          Chụp kỷ yếu, chân dung và những chuyến đi — giữ lại khoảnh khắc theo
+          cách của bạn.
+        </Text>
+      </div>
+      <nav class="flex flex-col gap-2" aria-label="Liên kết chân trang">
+        {
+          footerLinks.map((link) => (
+            <a
+              href={link.href}
+              class="text-sm text-base-300 hover:text-accent-400 duration-300 uppercase"
+            >
+              {link.text}
+            </a>
+          ))
+        }
+      </nav>
+      <div class="text-sm text-base-300 space-y-2">
+        <p>25 Tràng Thi, Hoàn Kiếm, Hà Nội</p>
+        <p>
+          Hotline/Zalo: <a href="tel:+84868868238" class="hover:text-accent-400"
+            >0868 868 238</a
+          >
+        </p>
+        <p>
+          Email: <a
+            href="mailto:lienhe@tiemanh.vn"
+            class="hover:text-accent-400">lienhe@tiemanh.vn</a
+          >
+        </p>
+        <div class="flex gap-4 pt-2">
+          {
+            socialLinks.map((link) => (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener"
+                class="uppercase text-xs font-medium text-white hover:text-accent-400 duration-300"
+              >
+                {link.text}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+    <Text tag="p" variant="textXS" class="text-base-500 mt-12">
+      © <span id="year"></span> Tiệm Ảnh — tiemanh.vn. Giữ mọi bản quyền hình
+      ảnh.
+    </Text>
+  </Wrapper>
+</footer>
+<script is:inline>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>

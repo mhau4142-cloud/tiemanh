@@ -1,0 +1,138 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Sections
+import BlogCard from "@/components/blog/BlogCard.astro";
+// Data
+import { tagLabel } from "@/data/tags";
+const { frontmatter, id } = Astro.props;
+import { getEntry, getCollection } from "astro:content";
+const team = await getEntry("team", frontmatter.team);
+// Bài liên quan: cùng tag, loại trừ chính bài đang đọc
+const allPosts = await getCollection("posts");
+const relatedPosts = allPosts.filter(
+  (post) =>
+    post.id !== id &&
+    post.data.tags.some((tag) => frontmatter.tags.includes(tag))
+);
+---
+
+<BaseLayout
+  title={`${frontmatter.title} | Tiệm Ảnh`}
+  description={frontmatter.description}
+>
+  <section>
+    <Wrapper variant="standard" class="py-16 sm:py-24 lg:pt-32">
+      <div class="max-w-3xl">
+        <div class="flex flex-wrap items-center gap-3">
+          {
+            frontmatter.tags.map((tag) => (
+              <a
+                class="text-[0.65rem] uppercase tracking-[0.15em] text-accent-700 hover:text-base-950 duration-300 border border-base-300 hover:border-base-950 px-3 py-1"
+                href={`/blog/tags/${tag}`}
+              >
+                {tagLabel(tag)}
+              </a>
+            ))
+          }
+        </div>
+        <Text
+          tag="h1"
+          variant="displayMD"
+          class="mt-5 font-extrabold tracking-tight text-base-950 text-balance"
+        >
+          {frontmatter.title}
+        </Text>
+        <p
+          class="mt-4 text-[0.65rem] uppercase tracking-[0.15em] text-base-500"
+        >
+          Đăng ngày
+          <time datetime={new Date(frontmatter.pubDate).toISOString()}>
+            {
+              new Date(frontmatter.pubDate).toLocaleDateString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })
+            }
+          </time>
+          {team && <span> — {team.data.name}</span>}
+        </p>
+      </div>
+
+      <!-- Ảnh minh họa bài viết: stock Pexels theo chủ đề bài, tại src/images/blog -->
+      <div class="overflow-hidden bg-base-100 mt-10">
+        <Image
+          width={2000}
+          height={1000}
+          src={frontmatter.image.url}
+          alt={frontmatter.image.alt}
+          loading="eager"
+          class="w-full aspect-[2/1] object-cover"
+        />
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-3">
+          <p
+            class="lg:sticky lg:top-24 text-sm italic text-base-500 max-w-xs border-l-2 border-accent-400 pl-4"
+          >
+            {frontmatter.description}
+          </p>
+        </div>
+        <Wrapper
+          variant="prose"
+          class="lg:col-span-7 prose-headings:font-bold prose-headings:tracking-tight"
+        >
+          <slot />
+        </Wrapper>
+      </div>
+    </Wrapper>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-accent-400">
+    <Wrapper
+      variant="standard"
+      class="py-12 sm:py-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"
+    >
+      <div>
+        <Text
+          tag="h2"
+          variant="displaySM"
+          class="font-extrabold uppercase tracking-tight text-black"
+        >
+          Sẵn sàng cho buổi chụp của bạn?
+        </Text>
+        <Text tag="p" variant="textSM" class="text-black/70 mt-2">
+          Nhắn Zalo 0868 868 238 hoặc điền form — Tiệm báo giá trong ngày.
+        </Text>
+      </div>
+      <Button isLink href="/dat-lich" variant="default" size="base"
+        >Đặt lịch chụp</Button
+      >
+    </Wrapper>
+  </section>
+
+  {
+    relatedPosts.length > 0 && (
+      <section>
+        <Wrapper variant="standard" class="py-16 sm:py-20">
+          <p class="text-[0.65rem] uppercase tracking-[0.2em] text-base-500">
+            ( Bài viết liên quan )
+          </p>
+          <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+            {relatedPosts.slice(0, 3).map((post) => (
+              <BlogCard post={post} />
+            ))}
+          </div>
+        </Wrapper>
+      </section>
+    )
+  }
+</BaseLayout>

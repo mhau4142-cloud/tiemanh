@@ -1,0 +1,250 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+import { getCollection } from "astro:content";
+const { service } = Astro.props;
+
+// Bộ ảnh cùng thể loại làm hero + phần portfolio minh họa
+const galleryPosts = (await getCollection("gallery"))
+  .filter((post) => post.data.category === service.category)
+  .sort((a, b) => Number(a.id) - Number(b.id));
+const heroPost = galleryPosts[0];
+---
+
+<BaseLayout title={service.seoTitle} description={service.seoDescription}>
+  <!-- Hero — dùng ảnh stock Pexels từ gallery cùng thể loại; tự đổi khi thay ảnh gallery -->
+  <section class="relative h-[70svh] min-h-100 overflow-hidden">
+    {
+      heroPost && (
+        <Image
+          src={heroPost.data.thumbnail.url}
+          alt={heroPost.data.thumbnail.alt}
+          width={2000}
+          height={1400}
+          loading="eager"
+          class="absolute inset-0 size-full object-cover"
+        />
+      )
+    }
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/30"
+    >
+    </div>
+    <div class="relative z-10 flex h-full flex-col justify-between">
+      <Wrapper variant="standard" class="pt-6">
+        <p
+          class="text-[0.65rem] uppercase tracking-[0.2em] text-white/80"
+        >
+          Dịch vụ — Tiệm Ảnh
+        </p>
+      </Wrapper>
+      <Wrapper variant="standard" class="pb-10">
+        <h1
+          class="text-4xl sm:text-6xl lg:text-7xl font-extrabold uppercase tracking-tighter leading-none text-white text-balance"
+        >
+          {service.title}
+        </h1>
+        <p
+          class="mt-4 text-base sm:text-lg font-bold italic text-accent-400"
+        >
+          {service.tagline}
+        </p>
+      </Wrapper>
+    </div>
+  </section>
+
+  <!-- Giới thiệu + hạng mục -->
+  <section>
+    <Wrapper variant="standard" class="py-16 sm:py-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-7 space-y-5">
+          {
+            service.intro.map((paragraph: string) => (
+              <Text tag="p" variant="textLG" class="text-base-700 leading-relaxed">
+                {paragraph}
+              </Text>
+            ))
+          }
+        </div>
+        <div class="lg:col-span-4 lg:col-start-9">
+          <p
+            class="text-[0.65rem] uppercase tracking-[0.2em] text-base-500"
+          >
+            ( Tiệm nhận chụp )
+          </p>
+          <ul class="mt-4 space-y-3">
+            {
+              service.includes.map((item: string) => (
+                <li class="border-l-2 border-accent-400 pl-4 text-sm text-base-800">
+                  {item}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+
+  <!-- Bảng giá của dịch vụ -->
+  <section class="bg-base-950 text-white">
+    <Wrapper variant="standard" class="py-16 sm:py-24">
+      <Text
+        tag="h2"
+        variant="displaySM"
+        class="font-extrabold uppercase tracking-tight"
+      >
+        Bảng giá
+      </Text>
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          service.packages.map((pkg) => (
+            <div class="border border-white/15 p-6 flex flex-col">
+              <Text tag="h3" variant="textBase" class="font-bold uppercase">
+                {pkg.name}
+              </Text>
+              <Text
+                tag="p"
+                variant="textLG"
+                class="font-extrabold text-accent-400 mt-2"
+              >
+                {pkg.price}
+              </Text>
+              <ul class="mt-4 space-y-2 text-sm text-base-400 grow">
+                {pkg.includes.map((item: string) => (
+                  <li class="border-l-2 border-accent-400 pl-3">{item}</li>
+                ))}
+              </ul>
+              <div class="mt-6">
+                <Button
+                  isLink
+                  href="/dat-lich"
+                  variant="accent"
+                  size="sm"
+                  class="w-full"
+                >
+                  Đặt gói này
+                </Button>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <p class="mt-8 text-xs text-base-500 uppercase tracking-[0.15em]">
+        Giá trọn gói, báo trước khi chụp — cần gói riêng cứ nhắn Tiệm
+      </p>
+    </Wrapper>
+  </section>
+
+  <!-- Bộ ảnh thuộc dịch vụ này -->
+  {
+    galleryPosts.length > 0 && (
+      <section>
+        <Wrapper variant="standard" class="py-16 sm:py-24">
+          <div class="flex items-end justify-between">
+            <Text
+              tag="h2"
+              variant="displaySM"
+              class="font-extrabold uppercase tracking-tight text-base-950"
+            >
+              Bộ ảnh đã chụp
+            </Text>
+            <a
+              href="/gallery"
+              class="uppercase text-xs font-medium text-base-900 hover:text-base-600 duration-300 underline underline-offset-4"
+            >
+              Xem tất cả
+            </a>
+          </div>
+          <div class="mt-10 grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {galleryPosts.slice(0, 3).map((post) => (
+              <article class="group relative">
+                <a
+                  href={`/gallery/posts/${post.id}`}
+                  title={post.data.title}
+                  class="absolute inset-0 z-10"
+                />
+                <div class="overflow-hidden aspect-[4/5] bg-base-100">
+                  <Image
+                    src={post.data.thumbnail.url}
+                    alt={post.data.thumbnail.alt}
+                    width={900}
+                    height={1125}
+                    loading="lazy"
+                    decoding="async"
+                    class="size-full object-cover group-hover:scale-105 duration-700 ease-out"
+                  />
+                </div>
+                <Text
+                  tag="h3"
+                  variant="textSM"
+                  class="mt-3 font-bold tracking-tight text-base-950 group-hover:underline underline-offset-4 decoration-accent-500 decoration-2"
+                >
+                  {post.data.title}
+                </Text>
+              </article>
+            ))}
+          </div>
+        </Wrapper>
+      </section>
+    )
+  }
+
+  <!-- FAQ -->
+  <section class="border-t border-base-200">
+    <Wrapper variant="standard" class="py-16 sm:py-24">
+      <Text
+        tag="h2"
+        variant="displaySM"
+        class="font-extrabold uppercase tracking-tight text-base-950"
+      >
+        Câu hỏi thường gặp
+      </Text>
+      <div class="mt-8 divide-y divide-base-200 border-y border-base-200">
+        {
+          service.faqs.map((faq) => (
+            <details class="group py-4">
+              <summary class="flex cursor-pointer items-center justify-between text-sm font-bold uppercase text-base-950 list-none">
+                {faq.question}
+                <span class="text-accent-600 text-xl leading-none group-open:rotate-45 duration-300">
+                  +
+                </span>
+              </summary>
+              <p class="mt-3 text-sm text-base-600 max-w-2xl">{faq.answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-accent-400">
+    <Wrapper
+      variant="standard"
+      class="py-12 sm:py-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"
+    >
+      <div>
+        <Text
+          tag="h2"
+          variant="displaySM"
+          class="font-extrabold uppercase tracking-tight text-black"
+        >
+          Chốt lịch cho buổi chụp của bạn?
+        </Text>
+        <Text tag="p" variant="textSM" class="text-black/70 mt-2">
+          Nhắn Zalo 0868 868 238 hoặc điền form — Tiệm báo giá trong ngày.
+        </Text>
+      </div>
+      <Button isLink href="/dat-lich" variant="default" size="base"
+        >Đặt lịch chụp</Button
+      >
+    </Wrapper>
+  </section>
+</BaseLayout>

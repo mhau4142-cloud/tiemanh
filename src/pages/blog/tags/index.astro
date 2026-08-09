@@ -1,0 +1,46 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Data
+import { tagLabel } from "@/data/tags";
+// Content
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("posts");
+const tags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
+---
+
+<BaseLayout
+  title="Chủ đề bài viết — Blog Tiệm Ảnh"
+  description="Duyệt bài viết của Tiệm Ảnh theo chủ đề: kỷ yếu, chân dung, dã ngoại, kinh nghiệm chụp ảnh."
+>
+  <section>
+    <Wrapper variant="standard" class="py-16 sm:py-24 lg:pt-32">
+      <Text
+        tag="h1"
+        variant="display2XL"
+        class="font-extrabold uppercase tracking-tight text-base-950"
+      >
+        Chủ đề
+      </Text>
+      <div class="mt-10 flex flex-wrap gap-3">
+        {
+          tags.map((tag) => (
+            <a
+              href={`/blog/tags/${tag}`}
+              class="px-5 py-3 text-sm font-bold uppercase tracking-wide border border-base-300 text-base-900 hover:bg-base-950 hover:text-white hover:border-base-950 duration-300"
+            >
+              {tagLabel(tag)}
+            </a>
+          ))
+        }
+      </div>
+      <a
+        href="/blog"
+        class="mt-12 inline-block text-xs font-bold uppercase tracking-[0.15em] text-base-950 border-b-2 border-accent-400 pb-1 hover:border-base-950 duration-300"
+        >← Tất cả bài viết</a
+      >
+    </Wrapper>
+  </section>
+</BaseLayout>

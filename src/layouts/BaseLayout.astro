@@ -1,0 +1,22 @@
+---
+// Fundations
+import "@/styles/global.css";
+import BaseHead from "@/components/fundations/head/BaseHead.astro";
+// Components
+import Footer from "@/components/global/Footer.astro";
+import Navigation from "@/components/global/Navigation.astro";
+import FloatingContact from "@/components/global/FloatingContact.astro";
+const { title, description } = Astro.props;
+---
+
+<html lang="vi" class="scroll-smooth">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="flex flex-col bg-white min-h-svh">
+    <Navigation />
+    <main class="grow"><slot /></main>
+    <Footer />
+    <FloatingContact />
+  </body>
+</html>

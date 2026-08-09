@@ -1,0 +1,213 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+import { getCollection } from "astro:content";
+const { frontmatter, id } = Astro.props;
+
+const allGallery = (await getCollection("gallery")).sort(
+  (a, b) => Number(a.id) - Number(b.id)
+);
+const index = allGallery.findIndex((entry) => entry.id === id);
+const prevPost = allGallery[(index - 1 + allGallery.length) % allGallery.length];
+const nextPost = allGallery[(index + 1) % allGallery.length];
+
+// Nhịp dàn ảnh: 1 ảnh lớn → cặp 2 ảnh → lặp lại (ảnh lẻ cuối hiển thị lớn)
+const images = frontmatter.images ?? [];
+const rows = [];
+let cursor = 0;
+let fullWidth = true;
+while (cursor < images.length) {
+  if (fullWidth || cursor === images.length - 1) {
+    rows.push(images.slice(cursor, cursor + 1));
+    cursor += 1;
+  } else {
+    rows.push(images.slice(cursor, cursor + 2));
+    cursor += 2;
+  }
+  fullWidth = !fullWidth;
+}
+---
+
+<BaseLayout
+  title={`${frontmatter.title} — ${frontmatter.category} | Tiệm Ảnh`}
+  description={frontmatter.description}
+>
+  <!-- Hero — ảnh đại diện tràn màn hình -->
+  <section class="relative h-[70svh] min-h-100 overflow-hidden">
+    <Image
+      src={frontmatter.thumbnail.url}
+      alt={frontmatter.thumbnail.alt}
+      width={2000}
+      height={1400}
+      loading="eager"
+      class="absolute inset-0 size-full object-cover"
+    />
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30"
+    >
+    </div>
+    <div class="relative z-10 flex h-full flex-col justify-between">
+      <Wrapper variant="standard" class="pt-6">
+        <a
+          href="/gallery"
+          class="inline-block text-[0.65rem] uppercase tracking-[0.2em] text-white/80 hover:text-accent-400 duration-300"
+          >← Thư viện ảnh</a
+        >
+      </Wrapper>
+      <Wrapper variant="standard" class="pb-10">
+        <p
+          class="text-[0.65rem] uppercase tracking-[0.2em] text-accent-400"
+        >
+          {frontmatter.category}
+        </p>
+        <h1
+          class="mt-3 text-4xl sm:text-6xl lg:text-7xl font-extrabold uppercase tracking-tighter leading-none text-white text-balance"
+        >
+          {frontmatter.title}
+        </h1>
+      </Wrapper>
+    </div>
+  </section>
+
+  <!-- Mô tả -->
+  <section>
+    <Wrapper variant="standard" class="py-14 sm:py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <p
+          class="lg:col-span-3 text-[0.65rem] uppercase tracking-[0.2em] text-base-500"
+        >
+          ( Về bộ ảnh )
+        </p>
+        <div class="lg:col-span-7">
+          <Text
+            tag="p"
+            variant="textLG"
+            class="text-base-800 leading-relaxed text-balance"
+          >
+            {frontmatter.description}
+          </Text>
+          <div class="prose prose-sm mt-6 max-w-none text-base-600">
+            <slot />
+          </div>
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+
+  <!-- Dàn ảnh theo nhịp: lớn — cặp — lớn -->
+  <section>
+    <Wrapper variant="standard" class="pb-16 sm:pb-24">
+      <div class="space-y-4 md:space-y-6">
+        {
+          rows.map((row) =>
+            row.length === 1 ? (
+              <div class="overflow-hidden bg-base-100">
+                <Image
+                  src={row[0].url}
+                  alt={row[0].alt}
+                  width={2000}
+                  height={1250}
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full aspect-[16/10] object-cover"
+                />
+              </div>
+            ) : (
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                {row.map((img) => (
+                  <div class="overflow-hidden bg-base-100">
+                    <Image
+                      src={img.url}
+                      alt={img.alt}
+                      width={1200}
+                      height={1500}
+                      loading="lazy"
+                      decoding="async"
+                      class="size-full aspect-[4/5] object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )
+          )
+        }
+      </div>
+    </Wrapper>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-accent-400">
+    <Wrapper
+      variant="standard"
+      class="py-12 sm:py-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"
+    >
+      <div>
+        <Text
+          tag="h2"
+          variant="displaySM"
+          class="font-extrabold uppercase tracking-tight text-black"
+        >
+          Thích concept này?
+        </Text>
+        <Text tag="p" variant="textSM" class="text-black/70 mt-2">
+          Nhắn Tiệm để chụp một bộ của riêng bạn — báo giá trong ngày.
+        </Text>
+      </div>
+      <Button isLink href="/dat-lich" variant="default" size="base"
+        >Đặt lịch chụp</Button
+      >
+    </Wrapper>
+  </section>
+
+  <!-- Điều hướng bộ trước / bộ tiếp theo -->
+  <section>
+    <Wrapper variant="standard" class="py-16 sm:py-20">
+      <p class="text-[0.65rem] uppercase tracking-[0.2em] text-base-500">
+        ( Xem tiếp )
+      </p>
+      <div class="mt-8 grid grid-cols-2 gap-4 md:gap-6">
+        {
+          [
+            { post: prevPost, label: "← Bộ trước" },
+            { post: nextPost, label: "Bộ tiếp theo →" },
+          ].map(({ post, label }, i) => (
+            <article class={`group relative ${i === 1 ? "text-right" : ""}`}>
+              <a
+                href={`/gallery/posts/${post.id}`}
+                title={post.data.title}
+                class="absolute inset-0 z-10"
+              />
+              <div class="overflow-hidden bg-base-100">
+                <Image
+                  src={post.data.thumbnail.url}
+                  alt={post.data.thumbnail.alt}
+                  width={1200}
+                  height={750}
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full aspect-[16/10] object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 duration-700 ease-out"
+                />
+              </div>
+              <span class="block mt-3 text-[0.65rem] uppercase tracking-[0.2em] text-base-500">
+                {label}
+              </span>
+              <Text
+                tag="h3"
+                variant="textSM"
+                class="mt-1 font-bold tracking-tight text-base-950 group-hover:underline underline-offset-4 decoration-accent-500 decoration-2"
+              >
+                {post.data.title}
+              </Text>
+            </article>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

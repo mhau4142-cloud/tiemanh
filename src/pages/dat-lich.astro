@@ -1,0 +1,179 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+---
+
+<BaseLayout
+  title="Đặt lịch chụp ảnh — Tiệm Ảnh Hà Nội"
+  description="Đặt lịch chụp kỷ yếu, chân dung, dã ngoại với Tiệm Ảnh: điền form hoặc nhắn Zalo 0868 868 238 — báo giá trong ngày, không phát sinh."
+>
+  <section>
+    <Wrapper variant="standard" class="py-16 sm:py-24 lg:pt-32">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div>
+          <Text
+            tag="h1"
+            variant="display2XL"
+            class="font-extrabold uppercase tracking-tight text-base-950"
+          >
+            Đặt lịch chụp
+          </Text>
+          <Text tag="p" variant="textLG" class="text-base-600 mt-4">
+            Điền form bên cạnh hoặc nhắn thẳng cho Tiệm — kênh nào cũng được,
+            Tiệm phản hồi trong ngày.
+          </Text>
+
+          <div class="mt-10 space-y-4">
+            <a
+              href="https://zalo.me/0868868238"
+              target="_blank"
+              rel="noopener"
+              class="flex items-center justify-between bg-base-950 text-white p-5 hover:bg-base-800 duration-300"
+            >
+              <span class="font-bold uppercase">Nhắn Zalo</span>
+              <span class="text-xs text-base-400"
+                >0868 868 238 — nhanh nhất</span
+              >
+            </a>
+            <a
+              href="https://m.me/tiemanh"
+              target="_blank"
+              rel="noopener"
+              class="flex items-center justify-between bg-base-950 text-white p-5 hover:bg-base-800 duration-300"
+            >
+              <span class="font-bold uppercase">Facebook / Messenger</span>
+              <span class="text-xs text-base-400">fb.com/tiemanh</span>
+            </a>
+            <a
+              href="tel:+84868868238"
+              class="flex items-center justify-between bg-accent-400 text-black p-5 hover:bg-accent-300 duration-300"
+            >
+              <span class="font-bold uppercase">Gọi điện</span>
+              <span class="text-xs text-black/60">0868 868 238</span>
+            </a>
+          </div>
+
+          <address class="not-italic text-sm text-base-600 mt-10">
+            <p class="font-bold uppercase text-base-950">Ghé Tiệm chơi</p>
+            <p class="mt-2">25 Tràng Thi, Hoàn Kiếm, Hà Nội</p>
+            <p class="mt-1">Mở cửa 9:00 – 21:00, tất cả các ngày trong tuần</p>
+          </address>
+        </div>
+
+        <div class="bg-base-100 p-8">
+          <form id="bookingForm" class="space-y-5">
+            <div>
+              <label
+                for="fullName"
+                class="block text-xs font-bold uppercase text-base-950"
+                >Họ và tên *</label
+              >
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                required
+                placeholder="Nguyễn Văn A"
+                class="mt-2 block w-full border-base-300 bg-white text-base sm:text-sm focus:border-accent-600 focus:ring-accent-600"
+              />
+            </div>
+            <div>
+              <label
+                for="phone"
+                class="block text-xs font-bold uppercase text-base-950"
+                >Số điện thoại *</label
+              >
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                required
+                placeholder="09xx xxx xxx"
+                class="mt-2 block w-full border-base-300 bg-white text-base sm:text-sm focus:border-accent-600 focus:ring-accent-600"
+              />
+            </div>
+            <div>
+              <label
+                for="service"
+                class="block text-xs font-bold uppercase text-base-950"
+                >Loại dịch vụ *</label
+              >
+              <select
+                id="service"
+                name="service"
+                required
+                class="mt-2 block w-full border-base-300 bg-white text-base sm:text-sm focus:border-accent-600 focus:ring-accent-600"
+              >
+                <option value="">— Chọn dịch vụ —</option>
+                <option value="Kỷ yếu & sự kiện">Kỷ yếu &amp; sự kiện</option>
+                <option value="Chân dung & profile"
+                  >Chân dung &amp; profile</option
+                >
+                <option value="Chụp tự do & dã ngoại"
+                  >Chụp tự do &amp; dã ngoại</option
+                >
+                <option value="Khác">Khác (ghi rõ ở ghi chú)</option>
+              </select>
+            </div>
+            <div>
+              <label
+                for="date"
+                class="block text-xs font-bold uppercase text-base-950"
+                >Ngày mong muốn</label
+              >
+              <input
+                type="date"
+                id="date"
+                name="date"
+                class="mt-2 block w-full border-base-300 bg-white text-base sm:text-sm focus:border-accent-600 focus:ring-accent-600"
+              />
+            </div>
+            <div>
+              <label
+                for="notes"
+                class="block text-xs font-bold uppercase text-base-950"
+                >Ghi chú</label
+              >
+              <textarea
+                id="notes"
+                name="notes"
+                rows="4"
+                placeholder="Số người, địa điểm mong muốn, concept, ngân sách dự kiến..."
+                class="mt-2 block w-full border-base-300 bg-white text-base sm:text-sm focus:border-accent-600 focus:ring-accent-600"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              class="w-full bg-black text-white font-bold uppercase py-4 hover:bg-base-700 duration-300"
+            >
+              Gửi yêu cầu đặt lịch
+            </button>
+            <p class="text-xs text-base-500">
+              Form sẽ mở ứng dụng email của bạn với nội dung soạn sẵn gửi tới
+              Tiệm. Nếu không tiện email, cứ nhắn Zalo cho nhanh.
+            </p>
+          </form>
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  document.getElementById("bookingForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const value = (name) => form.elements[name].value.trim();
+    const subject = `[Đặt lịch chụp] ${value("service") || "Chưa chọn dịch vụ"} — ${value("fullName")}`;
+    const body = [
+      `Họ và tên: ${value("fullName")}`,
+      `Số điện thoại: ${value("phone")}`,
+      `Loại dịch vụ: ${value("service")}`,
+      `Ngày mong muốn: ${value("date") || "Chưa chọn"}`,
+      `Ghi chú: ${value("notes") || "Không có"}`,
+    ].join("\n");
+    window.location.href = `mailto:lienhe@tiemanh.vn?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+</script>

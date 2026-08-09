@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard — Tiệm Ảnh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&display=swap" rel="stylesheet" />
+<style>
+  :root { --accent: #e8ff3c; --ink: #111318; --muted: #6b7280; --line: #e5e7eb; }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: "Be Vietnam Pro", sans-serif; background: #fafafa; color: var(--ink); }
+  header { background: var(--ink); color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  header .brand { font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; }
+  header .brand em { background: var(--accent); color: #000; font-style: normal; padding: 0 6px; margin-left: 4px; }
+  header a { color: #d1d5db; font-size: 12px; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; }
+  header a:hover { color: var(--accent); }
+  main { max-width: 880px; margin: 0 auto; padding: 32px 16px 80px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .tab { border: 1px solid var(--line); background: #fff; padding: 10px 18px; font: inherit; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; }
+  .tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+  section.panel { display: none; background: #fff; border: 1px solid var(--line); padding: 28px; }
+  section.panel.active { display: block; }
+  h2 { font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin-bottom: 22px; }
+  label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin: 18px 0 6px; }
+  label .hint { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); }
+  input[type="text"], textarea, select { width: 100%; border: 1px solid #d1d5db; padding: 10px 12px; font: inherit; font-size: 14px; background: #fff; }
+  input:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 0; }
+  textarea { resize: vertical; }
+  .tagbox { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tagbox label { display: inline-flex; align-items: center; gap: 6px; margin: 0; border: 1px solid var(--line); padding: 8px 12px; cursor: pointer; font-size: 12px; }
+  .tagbox input { accent-color: #111; }
+  .btn { margin-top: 24px; background: var(--accent); color: #000; border: none; padding: 14px 28px; font: inherit; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; }
+  .btn:hover { filter: brightness(1.05); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+  .msg { margin-top: 16px; padding: 12px 14px; font-size: 14px; display: none; }
+  .msg.ok { display: block; background: #ecfdf5; color: #065f46; }
+  .msg.err { display: block; background: #fef2f2; color: #991b1b; }
+  .msg a { color: inherit; font-weight: 600; }
+  .previews { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .previews .ph { position: relative; }
+  .previews img { width: 92px; height: 92px; object-fit: cover; border: 1px solid var(--line); display: block; }
+  .previews input { width: 92px; font-size: 10px; border: 1px solid var(--line); border-top: none; padding: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 8px; border-bottom: 2px solid var(--ink); }
+  td { padding: 10px 8px; border-bottom: 1px solid var(--line); }
+  td a { color: var(--ink); }
+  .del { background: none; border: 1px solid #fca5a5; color: #b91c1c; font: inherit; font-size: 12px; padding: 4px 10px; cursor: pointer; }
+  .del:hover { background: #fef2f2; }
+  .note { font-size: 13px; color: var(--muted); margin-top: 20px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">Tiệm<em>Ảnh</em> — Dashboard</span>
+  <a href="http://localhost:4321" target="_blank">Xem website ↗</a>
+</header>
+<main>
+  <div class="tabs">
+    <button class="tab active" data-panel="gallery">Đăng bộ ảnh</button>
+    <button class="tab" data-panel="blog">Viết bài blog</button>
+    <button class="tab" data-panel="manage">Quản lý bài đã đăng</button>
+  </div>
+
+  <!-- ĐĂNG BỘ ẢNH -->
+  <section class="panel active" id="panel-gallery">
+    <h2>Đăng bộ ảnh mới</h2>
+    <form id="galleryForm">
+      <label>Tên bộ ảnh *</label>
+      <input type="text" name="title" required placeholder="VD: Kỷ yếu 12A1 — THPT Chu Văn An" />
+      <label>Dịch vụ *</label>
+      <select name="category" id="categorySelect" required></select>
+      <label>Mô tả ngắn * <span class="hint">— 1–2 câu, hiện dưới tiêu đề và dùng cho SEO</span></label>
+      <textarea name="description" rows="2" required placeholder="VD: Một buổi chiều tháng 5 ở sân trường — cười nhiều hơn chụp."></textarea>
+      <label>Ảnh đại diện (thumbnail) *</label>
+      <input type="file" id="thumbInput" accept="image/jpeg,image/png,image/webp" required />
+      <div class="previews" id="thumbPreview"></div>
+      <label>Các ảnh trong bộ * <span class="hint">— chọn nhiều ảnh cùng lúc; có thể sửa chú thích (alt) dưới từng ảnh</span></label>
+      <input type="file" id="imagesInput" accept="image/jpeg,image/png,image/webp" multiple required />
+      <div class="previews" id="imagesPreview"></div>
+      <button class="btn" type="submit">Đăng bộ ảnh</button>
+      <div class="msg" id="galleryMsg"></div>
+    </form>
+  </section>
+
+  <!-- VIẾT BLOG -->
+  <section class="panel" id="panel-blog">
+    <h2>Viết bài blog</h2>
+    <form id="blogForm">
+      <label>Tiêu đề *</label>
+      <input type="text" name="title" id="blogTitle" required placeholder="VD: 5 concept kỷ yếu được hỏi nhiều nhất năm nay" />
+      <label>Đường dẫn (slug) <span class="hint">— tự tạo từ tiêu đề, sửa được</span></label>
+      <input type="text" name="slug" id="blogSlug" placeholder="vd-5-concept-ky-yeu" />
+      <label>Mô tả ngắn * <span class="hint">— 1–2 câu tóm tắt, hiện trên Google</span></label>
+      <textarea name="description" rows="2" required></textarea>
+      <label>Chủ đề *</label>
+      <div class="tagbox" id="tagBox"></div>
+      <label>Ảnh bìa *</label>
+      <input type="file" id="coverInput" accept="image/jpeg,image/png,image/webp" required />
+      <div class="previews" id="coverPreview"></div>
+      <label>Nội dung * <span class="hint">— viết văn bình thường; xuống 2 dòng để tách đoạn; dòng bắt đầu bằng "## " là tiêu đề mục; "- " là gạch đầu dòng</span></label>
+      <textarea name="content" rows="16" required placeholder="## Mở đầu&#10;&#10;Viết nội dung ở đây...&#10;&#10;- Ý thứ nhất&#10;- Ý thứ hai"></textarea>
+      <button class="btn" type="submit">Đăng bài</button>
+      <div class="msg" id="blogMsg"></div>
+    </form>
+  </section>
+
+  <!-- QUẢN LÝ -->
+  <section class="panel" id="panel-manage">
+    <h2>Bài đã đăng</h2>
+    <h3 style="font-size:14px;text-transform:uppercase;margin:12px 0 8px">Bộ ảnh</h3>
+    <table id="galleryTable"><thead><tr><th>Tên</th><th>Dịch vụ</th><th></th></tr></thead><tbody></tbody></table>
+    <h3 style="font-size:14px;text-transform:uppercase;margin:28px 0 8px">Bài blog</h3>
+    <table id="postsTable"><thead><tr><th>Tiêu đề</th><th>Ngày đăng</th><th></th></tr></thead><tbody></tbody></table>
+    <p class="note">Xóa chỉ gỡ bài khỏi website, file ảnh vẫn nằm trong thư mục dự án để an toàn. Sau khi bấm Đăng/Xóa, hệ thống tự nạp lại website (mất khoảng 5–10 giây) — xong là xem được ngay ở localhost:4321.</p>
+  </section>
+</main>
+
+<script>
+const $ = (s) => document.querySelector(s);
+let STATE = { categories: [], tags: {}, gallery: [], posts: [] };
+
+// tabs
+document.querySelectorAll(".tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
+    tab.classList.add("active");
+    $("#panel-" + tab.dataset.panel).classList.add("active");
+  });
+});
+
+function slugify(s) {
+  return s.normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+$("#blogTitle").addEventListener("input", (e) => { $("#blogSlug").value = slugify(e.target.value); });
+
+function fileToObj(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve({ name: file.name, data: reader.result });
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderPreviews(input, container, withAlt) {
+  container.innerHTML = "";
+  [...input.files].forEach((file, i) => {
+    const div = document.createElement("div");
+    div.className = "ph";
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    div.appendChild(img);
+    if (withAlt) {
+      const alt = document.createElement("input");
+      alt.type = "text";
+      alt.placeholder = "Chú thích ảnh " + (i + 1);
+      alt.dataset.altIndex = i;
+      div.appendChild(alt);
+    }
+    container.appendChild(div);
+  });
+}
+$("#thumbInput").addEventListener("change", () => renderPreviews($("#thumbInput"), $("#thumbPreview"), false));
+$("#imagesInput").addEventListener("change", () => renderPreviews($("#imagesInput"), $("#imagesPreview"), true));
+$("#coverInput").addEventListener("change", () => renderPreviews($("#coverInput"), $("#coverPreview"), false));
+
+function showMsg(el, ok, html) { el.className = "msg " + (ok ? "ok" : "err"); el.innerHTML = html; }
+
+async function loadState() {
+  STATE = await (await fetch("/api/state")).json();
+  $("#categorySelect").innerHTML = STATE.categories.map((c) => `<option>${c}</option>`).join("");
+  $("#tagBox").innerHTML = Object.entries(STATE.tags)
+    .map(([slug, label]) => `<label><input type="checkbox" value="${slug}" /> ${label}</label>`).join("");
+  $("#galleryTable tbody").innerHTML = STATE.gallery.map((g) =>
+    `<tr><td><a href="http://localhost:4321/gallery/posts/${g.id}" target="_blank">${g.title}</a></td><td>${g.category}</td><td><button class="del" data-kind="gallery" data-id="${g.id}">Xóa</button></td></tr>`).join("");
+  $("#postsTable tbody").innerHTML = STATE.posts.map((p) =>
+    `<tr><td><a href="http://localhost:4321/blog/posts/${p.id}" target="_blank">${p.title}</a></td><td>${p.pubDate}</td><td><button class="del" data-kind="blog" data-id="${p.id}">Xóa</button></td></tr>`).join("");
+}
+
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".del");
+  if (!btn) return;
+  if (!confirm("Xóa bài này khỏi website?")) return;
+  const res = await fetch(`/api/${btn.dataset.kind}/${btn.dataset.id}`, { method: "DELETE" });
+  if (res.ok) loadState();
+  else alert((await res.json()).error);
+});
+
+$("#galleryForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector(".btn");
+  btn.disabled = true;
+  try {
+    const thumbFile = $("#thumbInput").files[0];
+    const imageFiles = [...$("#imagesInput").files];
+    const alts = [...$("#imagesPreview").querySelectorAll("input")].map((i) => i.value);
+    const payload = {
+      title: form.title.value.trim(),
+      category: form.category.value,
+      description: form.description.value.trim(),
+      thumbnail: await fileToObj(thumbFile),
+      images: await Promise.all(imageFiles.map(async (f, i) => ({ ...(await fileToObj(f)), alt: alts[i] || "" }))),
+    };
+    const res = await fetch("/api/gallery", { method: "POST", body: JSON.stringify(payload) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    showMsg($("#galleryMsg"), true, `Đã đăng! <a href="http://localhost:4321${data.url}" target="_blank">Xem bộ ảnh ↗</a>`);
+    form.reset(); $("#thumbPreview").innerHTML = ""; $("#imagesPreview").innerHTML = "";
+    loadState();
+  } catch (err) { showMsg($("#galleryMsg"), false, err.message); }
+  btn.disabled = false;
+});
+
+$("#blogForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector(".btn");
+  btn.disabled = true;
+  try {
+    const payload = {
+      title: form.title.value.trim(),
+      slug: form.slug.value.trim() || slugify(form.title.value),
+      description: form.description.value.trim(),
+      tags: [...$("#tagBox").querySelectorAll("input:checked")].map((i) => i.value),
+      cover: await fileToObj($("#coverInput").files[0]),
+      content: form.content.value,
+    };
+    const res = await fetch("/api/blog", { method: "POST", body: JSON.stringify(payload) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    showMsg($("#blogMsg"), true, `Đã đăng! <a href="http://localhost:4321${data.url}" target="_blank">Xem bài viết ↗</a>`);
+    form.reset(); $("#coverPreview").innerHTML = "";
+    loadState();
+  } catch (err) { showMsg($("#blogMsg"), false, err.message); }
+  btn.disabled = false;
+});
+
+loadState();
+</script>
+</body>
+</html>

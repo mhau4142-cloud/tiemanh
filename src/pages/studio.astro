@@ -1,0 +1,140 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import StudioImage from "@/images/assets/studio.jpeg";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+const info = [
+  {
+    title: "Kỷ yếu & sự kiện",
+    columns: [
+      {
+        text: [
+          { text: "Kỷ yếu lớp, kỷ yếu khoa" },
+          { text: "Lễ tốt nghiệp" },
+          { text: "Sự kiện công ty, year-end party" },
+          { text: "Workshop, talkshow" },
+          { text: "Concept kỷ yếu theo chủ đề riêng" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Chân dung & profile",
+    columns: [
+      {
+        text: [
+          { text: "Ảnh thẻ, ảnh hồ sơ" },
+          { text: "Profile doanh nhân, LinkedIn" },
+          { text: "Chân dung nghệ thuật" },
+          { text: "Ảnh gia đình trong studio" },
+          { text: "Trang điểm & làm tóc (đặt thêm)" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Chụp tự do & dã ngoại",
+    columns: [
+      {
+        text: [
+          { text: "Đi theo yêu cầu trong và ngoài thành phố" },
+          { text: "Picnic, du lịch, phượt" },
+          { text: "Chụp phố, chụp đời thường" },
+          { text: "Concept tự do theo ý tưởng của bạn" },
+          { text: "Flycam (đặt thêm)" },
+        ],
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Về Tiệm Ảnh — tiệm chụp ảnh tại Hà Nội"
+  description="Câu chuyện của Tiệm Ảnh: bắt đầu từ những buổi kỷ yếu chụp giúp bạn bè, giữ nguyên tắc ảnh đẹp nhất là lúc bạn quên máy ảnh đang ở đó. Cam kết giá rõ, trả ảnh đúng hẹn."
+>
+  <section>
+    <Wrapper variant="standard" class="py-16 sm:py-24 lg:pt-48">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <Text
+          tag="h1"
+          variant="textBase"
+          class="font-bold text-base-950 uppercase"
+        >
+          Tiệm Ảnh là một tiệm chụp ảnh nhỏ, làm nghề bằng sự tử tế và một chút
+          liều lĩnh trong khung hình.
+        </Text>
+        <div class="flex flex-col gap-4 lg:col-start-3 lg:col-span-2">
+          <Text tag="p" variant="textSM" class="text-base-600">
+            Tụi mình bắt đầu từ những buổi kỷ yếu chụp giúp bạn bè, rồi thành
+            tiệm lúc nào không hay. Đến giờ, Tiệm vẫn giữ đúng một nguyên tắc:
+            ảnh đẹp nhất là lúc bạn quên mất máy ảnh đang ở đó.
+          </Text>
+          <Text tag="p" variant="textSM" class="text-base-600">
+            Tiệm không chụp theo khuôn. Mỗi lớp, mỗi người, mỗi chuyến đi có một
+            câu chuyện riêng — việc của Tiệm là kể lại câu chuyện đó bằng hình
+            ảnh, gọn gàng và có gu. Giá rõ ràng từ đầu, ảnh trả đúng hẹn, hậu kỳ
+            kỹ từng tấm.
+          </Text>
+        </div>
+      </div>
+      <!-- Ảnh stock Pexels (không gian studio); thay src/images/assets/studio.jpeg bằng ảnh thật của tiệm/ekip khi có -->
+      <Image
+        width={1400}
+        height={1400}
+        src={StudioImage}
+        alt="Không gian làm việc của Tiệm Ảnh"
+        class="object-cover object-bottom mt-24 size-full lg:max-h-200"
+      />
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
+          info.map((section) => (
+            <div>
+              <Text tag="h2" variant="textSM" class="font-bold uppercase">
+                {section.title}
+              </Text>
+              <div class="mt-1">
+                {section.columns.map((column) => (
+                  <ul class="space-y-1">
+                    {column.text.map((link) => (
+                      <li class="text-xs text-base-600">{link.text}</li>
+                    ))}
+                  </ul>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-24 bg-base-950 text-white p-8 lg:p-12">
+        <Text
+          tag="h2"
+          variant="displaySM"
+          class="font-extrabold uppercase tracking-tight"
+        >
+          Cam kết của Tiệm
+        </Text>
+        <ul class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <li class="border-l-2 border-accent-400 pl-4">
+            Báo giá trọn gói trước khi chụp — không phát sinh giữa chừng.
+          </li>
+          <li class="border-l-2 border-accent-400 pl-4">
+            Trả ảnh đúng hẹn, ảnh chọn được hậu kỳ kỹ từng tấm.
+          </li>
+          <li class="border-l-2 border-accent-400 pl-4">
+            Ảnh gốc lưu tối thiểu 6 tháng, gửi lại miễn phí khi cần.
+          </li>
+          <li class="border-l-2 border-accent-400 pl-4">
+            Không dùng ảnh của bạn để quảng cáo nếu chưa được đồng ý.
+          </li>
+        </ul>
+      </div>
+
+      <Wrapper />
+    </Wrapper>
+  </section>
+</BaseLayout>

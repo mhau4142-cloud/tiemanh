@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+@plugin "tailwind-scrollbar-hide";
+@theme {
+  /* Typography */
+  --font-sans: "Be Vietnam Pro", sans-serif;
+  /* Colors — accent: vàng neon (chữ đen trên nền vàng, không dùng chữ vàng trên nền trắng) */
+  --color-accent-50: oklch(0.99 0.03 112);
+  --color-accent-100: oklch(0.98 0.08 113);
+  --color-accent-200: oklch(0.96 0.13 114);
+  --color-accent-300: oklch(0.95 0.18 115);
+  --color-accent-400: oklch(0.94 0.22 116);
+  --color-accent-500: oklch(0.88 0.21 113);
+  --color-accent-600: oklch(0.74 0.17 111);
+  --color-accent-700: oklch(0.58 0.13 110);
+  --color-accent-800: oklch(0.45 0.1 110);
+  --color-accent-900: oklch(0.36 0.08 110);
+  --color-accent-950: oklch(0.25 0.05 110);
+ --color-base-50: oklch(0.985 0.002 247.839);
+  --color-base-100: oklch(0.967 0.003 264.542);
+  --color-base-200: oklch(0.928 0.006 264.531);
+  --color-base-300: oklch(0.872 0.01 258.338);
+  --color-base-400: oklch(0.707 0.022 261.325);
+  --color-base-500: oklch(0.551 0.027 264.364);
+  --color-base-600: oklch(0.446 0.03 256.802);
+  --color-base-700: oklch(0.373 0.034 259.733);
+  --color-base-800: oklch(0.278 0.033 256.848); /* Default */
+  --color-base-900: oklch(0.21 0.034 264.665);
+  --color-base-950: oklch(0.13 0.028 261.692);
+}

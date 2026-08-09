@@ -1,0 +1,39 @@
+---
+import { AstroSeo } from "@lexingtonthemes/seo";
+
+const DEFAULT_TITLE = "Tiệm Ảnh — Chụp kỷ yếu, chân dung & dã ngoại tại Hà Nội";
+const DEFAULT_DESCRIPTION =
+  "Tiệm Ảnh chụp kỷ yếu lớp, sự kiện, chân dung, ảnh profile và chụp tự do theo yêu cầu tại Hà Nội. Trẻ, kỹ, đúng hẹn — báo giá trọn gói, không phát sinh.";
+
+const { title = DEFAULT_TITLE, description = DEFAULT_DESCRIPTION } =
+  Astro.props;
+const canonical = new URL(Astro.url.pathname, "https://tiemanh.vn").href;
+---
+
+<AstroSeo
+  title={title}
+  description={description}
+  canonical={canonical}
+  openGraph={{
+    url: canonical,
+    title: title,
+    description: description,
+    images: [
+      {
+        url: "https://tiemanh.vn/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Tiệm Ảnh — tiệm chụp ảnh cho người trẻ",
+        type: "image/jpeg",
+      },
+    ],
+    site_name: "Tiệm Ảnh",
+    type: "website",
+    locale: "vi_VN",
+  }}
+  twitter={{
+    handle: "@tiemanh",
+    site: "@tiemanh",
+    cardType: "summary_large_image",
+  }}
+/>
