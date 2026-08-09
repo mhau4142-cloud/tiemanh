@@ -1,2 +1,2 @@
-<!-- FuseJS: https://fusejs.io/ -->
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.1.0"></script>
+<!-- FuseJS tự host (public/js/fuse.min.js), defer để không chặn render; Search.astro khởi tạo trong window load -->
+<script is:inline src="/js/fuse.min.js" defer></script>
